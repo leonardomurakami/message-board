@@ -1,8 +1,8 @@
-# Speedy-Typers
+# Message Board
 
 Projeto individual para a aula de MAC0350 do IME-USP.
 
-**Speedy-Typers** é um clone simples do TypeRacer, criado com o objetivo de avaliar a velocidade em que o usuário digita um texto, os dados serão armazenados em uma leaderboard para poder serem consultados.
+**Message Board** é um fórum de mensagens onde múltiplos usuários podem criar postagens, com suporte ao envio e exibição de imagens.
 
 ## Stack
 

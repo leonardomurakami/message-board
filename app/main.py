@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 
-app = FastAPI(title="Speedy Typers")
+app = FastAPI(title="Message Board")
 
 @app.get("/")
 def home():
