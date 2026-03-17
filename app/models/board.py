@@ -8,6 +8,7 @@ class Board(Base):
     __tablename__ = "boards"
 
     id = Column(Integer, primary_key=True, index=True)
+    short_name = Column(String, nullable=False)
     name = Column(String, nullable=False)
     description = Column(String, nullable=True)
     thread_count = Column(Integer, default=0)

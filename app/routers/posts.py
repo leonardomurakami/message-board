@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.dependencies import get_db
+from app.schemas.post import PostCreate, PostResponse
 from app.services import post_service
 
 router = APIRouter(prefix="/posts", tags=["posts"])
@@ -15,3 +16,8 @@ def get_posts(thread_id: int = None, db: Session = Depends(get_db)):
 @router.get("/{post_id}")
 def get_post(post_id: int, db: Session = Depends(get_db)):
     return post_service.get_post_by_id(db, post_id)
+
+
+@router.post("/", response_model=PostResponse)
+def create_post(thread_id: int, post: PostCreate, db: Session = Depends(get_db)):
+    return post_service.create_post(db, thread_id, post)

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}neko-chan{% endblock %}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <div class="top-bar"></div>
+
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="board-list">
+                [
+                {% for board in boards %}
+                <a href="/boards/{{ board.id }}">{{ board.short_name }}</a>{% if not loop.last %} /{% endif %}
+                {% endfor %}
+                ]
+            </div>
+        </div>
+    </header>
+
+    <div class="site-title-banner">
+        <h1>{% block heading %}neko-chan{% endblock %}</h1>
+    </div>
+
+    <main class="content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <nav class="footer-links">
+                <a href="/">Home</a>
+                <a href="/rules">Rules</a>
+                <a href="/faq">FAQ</a>
+                <a href="/feedback">Feedback</a>
+            </nav>
+            <p class="footer-copy">All content posted is the responsibility of its respective posters.</p>
+        </div>
+    </footer>
+</body>
+
+</html>

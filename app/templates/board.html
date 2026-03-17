@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}/{{ board.short_name }}/ - {{ board.name }}{% endblock %}
+
+{% block heading %}/{{ board.short_name }}/ - {{ board.name }}{% endblock %}
+
+{% block content %}
+<div class="board-info">
+    <p class="board-description">{{ board.description }}</p>
+</div>
+
+<div class="thread-list">
+    {% for thread in threads %}
+    <div class="thread-preview" id="t{{ thread.id }}">
+        <div class="thread-header">
+            <span class="thread-title">{{ thread.title }}</span>
+            <span class="thread-meta">
+                Created: {{ thread.created_at.strftime('%Y-%m-%d %H:%M:%S') }}
+                | Posts: {{ thread.post_count }}
+            </span>
+            <a href="/threads/{{ thread.id }}" class="view-thread-link">View Thread</a>
+        </div>
+    </div>
+    <hr>
+    {% else %}
+    <p>No threads yet. Be the first to start one!</p>
+    {% endfor %}
+</div>
+{% endblock %}
