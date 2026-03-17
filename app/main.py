@@ -1,23 +1,25 @@
-from contextlib import asynccontextmanager
-
 import uvicorn
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
-from app.models.database import Base, engine
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    Base.metadata.create_all(bind=engine)
-    yield
+from app.lifespan import lifespan
+from app.routers import boards, pages, posts, threads
 
 
-app = FastAPI(title="Message Board", lifespan=lifespan)
+def create_app() -> FastAPI:
+    app = FastAPI(title="Message Board", lifespan=lifespan)
+
+    app.include_router(boards.router)
+    app.include_router(threads.router)
+    app.include_router(posts.router)
+    app.include_router(pages.router)
+
+    app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
+    return app
 
 
-@app.get("/")
-def home():
-    return {"message": "Health check for now"}
+app = create_app()
 
 
 def start():

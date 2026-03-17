@@ -9,6 +9,7 @@ dependencies = [
     "sqlalchemy>=2.0.48",
     "uvicorn>=0.41.0",
     "pydantic-settings>=2.0.0",
+    "jinja2>=3.0.0",
 ]
 
 [build-system]
@@ -17,3 +18,40 @@ build-backend = "setuptools.build_meta"
 
 [project.scripts]
 start = "app.main:start"
+
+[tool.uv]
+default-groups = ["dev"]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.6.0",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["app"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # Pyflakes
+    "I",   # isort
+    "N",   # pep8-naming
+    "W",   # pycodestyle warnings
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "SIM", # flake8-simplify
+]
+ignore = [
+    "E501",  # line too long (handled by formatter)
+    "B008",  # Depends() in defaults is standard for FastAPI
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
