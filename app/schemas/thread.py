@@ -8,7 +8,7 @@ class ThreadBase(BaseModel):
 
 
 class ThreadCreate(ThreadBase):
-    pass
+    content: str | None = None
 
 
 class ThreadResponse(ThreadBase):

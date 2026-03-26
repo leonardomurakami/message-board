@@ -20,6 +20,10 @@ class BoardBase(BaseModel):
 class BoardCreate(BoardBase):
     pass
 
+# board creation should be behind a secure admin panel or something like that
+# i will not invest much time into this seeing as it is not the main focus of the project
+# this works for now
+
 
 class BoardResponse(BoardBase):
     id: int

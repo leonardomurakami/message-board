@@ -1,0 +1,25 @@
+<div class="thread-preview" id="t{{ thread.id }}">
+    <div class="thread-header">
+        <a href="#" class="expand-btn" hx-get="/pages/threads/{{ thread.id }}/expand" hx-target="#t{{ thread.id }}" hx-swap="outerHTML">[+]</a>
+        <span class="thread-title">{{ thread.title }}</span>
+        <span class="thread-meta">
+            No.{{ thread.id }} | Posts: {{ thread.post_count }} | {{ thread.created_at.strftime('%Y-%m-%d %H:%M:%S') }}
+        </span>
+    </div>
+    {% if thread.posts and thread.posts|length > 0 %}
+    {% set op = thread.posts[0] %}
+    <div class="thread-op" style="margin: 5px 0 10px 10px; font-size: 13px;">
+        <span style="font-weight: bold; color: #800000;">No.{{ op.post_number }}</span>
+        {% if op.content %}
+            {% if op.content|length > 150 %}
+                {{ op.content[:150] }}...
+            {% else %}
+                {{ op.content }}
+            {% endif %}
+        {% else %}
+            <em style="color: #888;">(no content)</em>
+        {% endif %}
+    </div>
+    {% endif %}
+    <hr>
+</div>

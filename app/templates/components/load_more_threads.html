@@ -1,0 +1,7 @@
+<div class="load-more-threads" id="load-more-threads-{{ board_id }}"
+     hx-get="/pages/boards/{{ board_id }}/threads?offset={{ next_offset }}&limit={{ limit }}"
+     hx-target="#load-more-threads-{{ board_id }}"
+     hx-swap="outerHTML"
+     hx-trigger="revealed"
+     style="margin: 20px 0; text-align: center; padding: 10px; color: #800000; font-weight: bold;">
+    Loading...</div>

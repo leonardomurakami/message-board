@@ -19,5 +19,5 @@ def get_post(post_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/", response_model=PostResponse)
-def create_post(thread_id: int, post: PostCreate, db: Session = Depends(get_db)):
-    return post_service.create_post(db, thread_id, post)
+def create_post(post: PostCreate, db: Session = Depends(get_db)):
+    return post_service.create_post(db, post.thread_id, post)

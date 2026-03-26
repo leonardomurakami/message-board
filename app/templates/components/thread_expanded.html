@@ -1,0 +1,38 @@
+<div class="thread-expanded" id="t{{ thread.id }}" style="margin-bottom: 20px; border: 1px solid #B7C5D9; padding: 5px; background: transparent;">
+    <div class="thread-header">
+        <a href="#" class="collapse-btn" hx-get="/pages/threads/{{ thread.id }}/collapse" hx-target="#t{{ thread.id }}" hx-swap="outerHTML">[-]</a>
+        <span class="thread-title">{{ thread.title }}</span>
+        <span class="thread-meta">
+            Created: {{ thread.created_at.strftime('%Y-%m-%d %H:%M:%S') }}
+            | Posts: {{ thread.post_count }}
+        </span>
+        <a href="/threads/{{ thread.id }}" class="view-thread-link">View Thread</a>
+    </div>
+
+    <div class="post-list" id="post-list-{{ thread.id }}" style="margin-left: 10px; margin-top: 10px;">
+        {% for post in posts %}
+            {% include 'components/post.html' %}
+        {% else %}
+            <p>No replies yet.</p>
+        {% endfor %}
+        {% if posts and posts|length < total_post_count %}
+            {% set thread_id = thread.id %}
+            {% set next_offset = posts|length %}
+            {% set limit = limit %}
+            {% include 'components/load_more_posts.html' %}
+        {% endif %}
+    </div>
+
+    <div class="inline-reply-form" style="margin-left: 10px; margin-top: 10px;">
+        <form hx-post="/pages/threads/{{ thread.id }}/posts" 
+              hx-target="#post-list-{{ thread.id }}"
+              hx-swap="beforeend"
+              hx-on::after-request="this.reset()"
+              style="display: flex; gap: 5px; align-items: start;">
+            <label for="content" style="font-weight: bold; color: #800000;">Reply:</label>
+            <textarea name="content" rows="2" required style="flex: 1; max-width: 400px; border: 1px solid #CCC;"></textarea>
+            <button type="submit" style="padding: 2px 5px;">Post</button>
+        </form>
+    </div>
+    <hr>
+</div>

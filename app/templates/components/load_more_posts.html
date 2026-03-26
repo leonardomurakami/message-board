@@ -1,0 +1,9 @@
+<div class="load-more-posts" id="load-more-posts-{{ thread_id }}" style="margin: 15px 0; text-align: center; margin-left: 10px;">
+    <button hx-get="/pages/threads/{{ thread_id }}/posts?offset={{ next_offset }}&limit={{ limit }}"
+            hx-target="#load-more-posts-{{ thread_id }}"
+            hx-swap="outerHTML"
+            class="load-more-btn"
+            style="padding: 6px 15px; background-color: #D6DAF0; border: 1px solid #B7C5D9; cursor: pointer; font-weight: bold; color: #800000;">
+        [Show More]
+    </button>
+</div>

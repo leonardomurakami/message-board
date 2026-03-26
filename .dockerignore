@@ -1,0 +1,12 @@
+.venv/
+.git/
+.gitignore
+.ruff_cache/
+__pycache__/
+*.pyc
+*.pyo
+*.db
+*.egg-info/
+message_board.egg-info/
+.env
+.envrc
