@@ -9,6 +9,7 @@
     <p class="board-description">{{ board.description }}</p>
 </div>
 
+{% if logged_user %}
 <div class="post-form-container">
     <form hx-post="/pages/boards/{{ board.id }}/threads" 
           hx-target="#thread-list"
@@ -25,6 +26,9 @@
         <button type="submit">Create Thread</button>
     </form>
 </div>
+{% else %}
+<p class="login-prompt">Log in to create a thread.</p>
+{% endif %}
 
 <div class="thread-list" id="thread-list">
     {% for thread in threads %}

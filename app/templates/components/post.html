@@ -5,13 +5,43 @@
             <span class="poster-id">ID: {{ post.poster_id }}</span>
         {% endif %}
         <span class="post-date">{{ post.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</span>
+        {% if post.edited_at %}
+        <button type="button" class="post-action-btn"
+                style="margin-left: 4px; font-style: italic; border: none; background: none; color: #888;"
+                hx-get="/pages/posts/{{ post.id }}/edits"
+                hx-target="#edit-history-container-{{ post.id }}"
+                hx-swap="innerHTML">(edited)</button>
+        {% endif %}
+        {% if logged_user and post.owner == logged_user %}
+        <span class="post-actions">
+            <button class="post-action-btn post-edit-btn" onclick="startEdit({{ post.id }})">Edit</button>
+            <button class="post-action-btn post-delete-btn"
+                    hx-delete="/pages/posts/{{ post.id }}"
+                    hx-target="#p{{ post.id }}"
+                    hx-swap="outerHTML"
+                    hx-confirm="Delete this post?">Delete</button>
+        </span>
+        {% endif %}
     </div>
     {% if post.image_path %}
     <div class="post-image">
         <img src="{{ post.image_path }}" alt="Post image" style="max-width: 200px;">
     </div>
     {% endif %}
-    <div class="post-content">
+    <div class="post-content" id="pc{{ post.id }}">
         {{ post.content }}
     </div>
+    <div id="edit-history-container-{{ post.id }}"></div>
+    {% if logged_user and post.owner == logged_user %}
+    <form class="post-edit-form" id="edit-form-{{ post.id }}" style="display:none;"
+          hx-put="/pages/posts/{{ post.id }}"
+          hx-target="#p{{ post.id }}"
+          hx-swap="outerHTML">
+        <textarea name="content" rows="3">{{ post.content }}</textarea>
+        <div class="post-edit-actions">
+            <button type="submit" class="post-action-btn">Save</button>
+            <button type="button" class="post-action-btn" onclick="cancelEdit({{ post.id }})">Cancel</button>
+        </div>
+    </form>
+    {% endif %}
 </div>

@@ -87,7 +87,7 @@ def create_thread(base_url, board_id, board_short_name):
     try:
         r = requests.post(
             f"{base_url}/api/threads/?board_id={board_id}",
-            json={"title": generate_thread_title(board_short_name), "content": generate_post_content(board_short_name)},
+            json={"title": generate_thread_title(board_short_name), "content": generate_post_content(board_short_name), "owner": "mock"},
         )
         return r.json() if r.status_code == 200 else None
     except Exception:
@@ -95,7 +95,7 @@ def create_thread(base_url, board_id, board_short_name):
 
 def create_post(base_url, thread_id, board_short_name):
     try:
-        r = requests.post(f"{base_url}/pages/threads/{thread_id}/posts", data={"content": generate_post_content(board_short_name)})
+        r = requests.post(f"{base_url}/pages/threads/{thread_id}/posts", data={"content": generate_post_content(board_short_name)}, cookies={"mb_user": "mock"})
         return r.status_code == 200
     except Exception:
         return False

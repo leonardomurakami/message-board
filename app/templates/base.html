@@ -22,6 +22,17 @@
                 {% endfor %}
                 ]
             </div>
+            <div class="header-login">
+                {% if logged_user %}
+                <span class="login-greeting">{{ logged_user }}</span>
+                <button type="button" class="login-btn" id="logout-btn" onclick="doLogout()">Logout</button>
+                {% else %}
+                <form class="login-form" id="login-form" onsubmit="doLogin(event)">
+                    <input type="text" id="login-username" name="username" placeholder="Username" required maxlength="32" autocomplete="off">
+                    <button type="submit" class="login-btn">Login</button>
+                </form>
+                {% endif %}
+            </div>
         </div>
     </header>
 
@@ -43,6 +54,27 @@
             <p class="footer-copy">All content posted is the responsibility of its respective posters.</p>
         </div>
     </footer>
+    <script>
+    function doLogin(e) {
+        e.preventDefault();
+        var name = document.getElementById('login-username').value.trim();
+        if (!name) return;
+        document.cookie = 'mb_user=' + encodeURIComponent(name) + ';path=/;max-age=31536000;SameSite=Lax';
+        location.reload();
+    }
+    function doLogout() {
+        document.cookie = 'mb_user=;path=/;max-age=0';
+        location.reload();
+    }
+    function startEdit(postId) {
+        document.getElementById('pc' + postId).style.display = 'none';
+        document.getElementById('edit-form-' + postId).style.display = 'block';
+    }
+    function cancelEdit(postId) {
+        document.getElementById('pc' + postId).style.display = '';
+        document.getElementById('edit-form-' + postId).style.display = 'none';
+    }
+    </script>
 </body>
 
 </html>

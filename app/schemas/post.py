@@ -13,6 +13,7 @@ def generate_poster_id() -> str:
 class PostBase(BaseModel):
     content: Optional[str] = None
     poster_id: Optional[str] = None
+    owner: Optional[str] = None
     image_path: Optional[str] = None
 
 
@@ -20,6 +21,7 @@ class PostCreate(PostBase):
     thread_id: int
     content: Optional[str] = None
     poster_id: Optional[str] = Field(default_factory=generate_poster_id)
+    owner: Optional[str] = None
     image_path: Optional[str] = None
 
 

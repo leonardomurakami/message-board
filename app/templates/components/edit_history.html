@@ -1,0 +1,16 @@
+<div class="edit-history" id="edit-history-{{ post.id }}">
+    <div class="edit-history-header">
+        <strong>Edit history for No. {{ post.post_number }}</strong>
+        <button type="button" class="post-action-btn" onclick="document.getElementById('edit-history-{{ post.id }}').remove()">Close</button>
+    </div>
+    <div class="edit-history-current">
+        <span class="edit-history-label">Current version:</span>
+        <div class="edit-history-content">{{ post.content }}</div>
+    </div>
+    {% for edit in edits %}
+    <div class="edit-history-entry">
+        <span class="edit-history-label">{{ edit.edited_at.strftime('%Y-%m-%d %H:%M:%S') }}:</span>
+        <div class="edit-history-content">{{ edit.old_content }}</div>
+    </div>
+    {% endfor %}
+</div>

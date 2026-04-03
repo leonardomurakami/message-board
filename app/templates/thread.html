@@ -24,6 +24,7 @@
     {% endfor %}
 </div>
 
+{% if logged_user %}
 <div class="post-form-container">
     <form hx-post="/pages/threads/{{ thread.id }}/posts"
           hx-target="#post-list"
@@ -36,4 +37,7 @@
         <button type="submit">Post</button>
     </form>
 </div>
+{% else %}
+<p class="login-prompt">Log in to reply.</p>
+{% endif %}
 {% endblock %}

@@ -9,7 +9,7 @@ class ThreadBase(BaseModel):
 
 class ThreadCreate(ThreadBase):
     content: str | None = None
-
+    owner: str | None = None
 
 class ThreadResponse(ThreadBase):
     id: int

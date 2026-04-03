@@ -77,7 +77,7 @@ def get_trending_threads(
     return [(t, first_by_tid.get(t.id)) for t in threads]
 
 
-def create_thread(db: Session, board_id: int, thread: ThreadCreate) -> Thread:
+def create_thread(db: Session, board_id: int, thread: ThreadCreate, owner: str = None) -> Thread:
     db_thread = Thread(
         board_id=board_id,
         title=thread.title,
@@ -91,6 +91,7 @@ def create_thread(db: Session, board_id: int, thread: ThreadCreate) -> Thread:
             content=thread.content,
             post_number=1,
             poster_id=generate_poster_id(),
+            owner=owner,
         )
         db.add(db_post)
         db_thread.post_count += 1

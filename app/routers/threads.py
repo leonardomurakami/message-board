@@ -20,4 +20,4 @@ def get_thread(thread_id: int, db: Session = Depends(get_db)):
 
 @router.post("/", response_model=ThreadResponse)
 def create_thread(board_id: int, thread: ThreadCreate, db: Session = Depends(get_db)):
-    return thread_service.create_thread(db, board_id, thread)
+    return thread_service.create_thread(db, board_id, thread, owner=thread.owner)
