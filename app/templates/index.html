@@ -4,9 +4,81 @@
 
 {% block heading %}{{ title | default("neko-chan") }}{% endblock %}
 
-{% block content %}
-<div class="welcome-box">
-    <p>Welcome to the message board!</p>
-    <p class="server-time">Server time: {{ server_time | default("Unknown") }}</p>
+{% block below_title %}
+{% if all_boards %}
+<div class="board-marquee-outer" role="region" aria-label="Boards">
+    <div class="board-marquee">
+        <div class="board-marquee-track" id="marquee-track">
+            <div class="board-marquee-set" id="marquee-original">
+                {% for board in all_boards %}
+                <a class="board-marquee-chip" href="/boards/{{ board.id }}">/{{ board.short_name }}/</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 </div>
+<script>
+(function () {
+    var track = document.getElementById('marquee-track');
+    var original = document.getElementById('marquee-original');
+    if (!track || !original) return;
+
+    var setWidth = original.offsetWidth;
+
+    var needed = Math.ceil((window.innerWidth + setWidth) / setWidth);
+    if (needed < 2) needed = 2;
+
+    for (var i = 1; i < needed; i++) {
+        var clone = original.cloneNode(true);
+        clone.removeAttribute('id');
+        clone.classList.add('board-marquee-set--clone');
+        clone.setAttribute('aria-hidden', 'true');
+        clone.querySelectorAll('a').forEach(function (a) { a.tabIndex = -1; });
+        track.appendChild(clone);
+    }
+
+    track.style.setProperty('--marquee-offset', '-' + setWidth + 'px');
+
+    var speed = 1200 / 55;
+    var duration = setWidth / speed;
+    track.style.setProperty('--marquee-duration', duration + 's');
+})();
+</script>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<section class="popular-section" aria-labelledby="popular-heading">
+    <h2 id="popular-heading" class="popular-heading">Popular right now</h2>
+    <p class="popular-sub">Ranked by recent activity and reply count.</p>
+    {% if trending_threads %}
+    <ul class="popular-list">
+        {% for thread, op in trending_threads %}
+        <li class="popular-item">
+            <div class="popular-item-top">
+                <a class="popular-board" href="/boards/{{ thread.board.id }}">/{{ thread.board.short_name }}/</a>
+                <a class="popular-thread-title" href="/threads/{{ thread.id }}">{{ thread.title }}</a>
+            </div>
+            <div class="popular-item-meta">
+                <span>{{ thread.post_count }} post{% if thread.post_count != 1 %}s{% endif %}</span>
+                <span class="meta-sep">|</span>
+                <span>Last bump {{ thread.bumped_at.strftime('%Y-%m-%d %H:%M') }}</span>
+            </div>
+            {% if op and op.content %}
+            <div class="popular-snippet">
+                {% if op.content|length > 200 %}
+                {{ op.content[:200] }}…
+                {% else %}
+                {{ op.content }}
+                {% endif %}
+            </div>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="popular-empty">No threads yet. Start one on a board!</p>
+    {% endif %}
+</section>
 {% endblock %}

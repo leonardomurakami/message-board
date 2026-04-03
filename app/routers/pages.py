@@ -16,6 +16,11 @@ router = APIRouter(tags=["pages"])
 @router.get("/", include_in_schema=False)
 def home(request: Request, db: Session = Depends(get_db)):
     boards = board_service.get_popular_boards(db)
+    all_boards = sorted(
+        board_service.get_all_boards(db),
+        key=lambda b: (b.short_name.lower(), b.id),
+    )
+    trending = thread_service.get_trending_threads(db, limit=15)
     return templates.TemplateResponse(
         "index.html",
         {
@@ -23,6 +28,8 @@ def home(request: Request, db: Session = Depends(get_db)):
             "title": "猫-chan",
             "server_time": datetime.now(),
             "boards": boards,
+            "all_boards": all_boards,
+            "trending_threads": trending,
         },
     )
 
@@ -63,6 +70,8 @@ def thread_page(thread_id: int, request: Request, db: Session = Depends(get_db))
     if not thread:
         return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
     board = board_service.get_board_by_id(db, thread.board_id)
+    if not board:
+        return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
     posts = post_service.get_all_posts(db, thread_id)
     boards = board_service.get_popular_boards(db)
 

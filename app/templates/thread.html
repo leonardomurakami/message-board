@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}/{{ board.short_name }}/ - {{ thread.title }}{% endblock %}
+
+{% block heading %}/{{ board.short_name }}/ - {{ thread.title }}{% endblock %}
+
+{% block content %}
+<div class="thread-navigation">
+    <a href="/boards/{{ board.id }}">Return to /{{ board.short_name }}/</a>
+</div>
+
+<div class="thread-header-info">
+    <p class="thread-page-meta">
+        No.{{ thread.id }} | {{ thread.post_count }} post{% if thread.post_count != 1 %}s{% endif %}
+        | Created {{ thread.created_at.strftime('%Y-%m-%d %H:%M:%S') }}
+    </p>
+</div>
+
+<div class="post-list" id="post-list">
+    {% for post in posts %}
+        {% include 'components/post.html' %}
+    {% else %}
+        <p id="no-posts-msg">No posts in this thread yet.</p>
+    {% endfor %}
+</div>
+
+<div class="post-form-container">
+    <form hx-post="/pages/threads/{{ thread.id }}/posts"
+          hx-target="#post-list"
+          hx-swap="beforeend"
+          hx-on::after-request="this.reset()">
+        <div class="form-group">
+            <label for="reply-content">Reply:</label>
+            <textarea id="reply-content" name="content" rows="4" required></textarea>
+        </div>
+        <button type="submit">Post</button>
+    </form>
+</div>
+{% endblock %}

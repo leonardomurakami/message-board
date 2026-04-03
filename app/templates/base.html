@@ -14,9 +14,10 @@
 
     <header class="site-header">
         <div class="header-inner">
+            <a class="header-home" href="/" title="Home">Home</a>
             <div class="board-list">
                 [
-                {% for board in boards %}
+                {% for board in boards|default([]) %}
                 <a href="/boards/{{ board.id }}">{{ board.short_name }}</a>{% if not loop.last %} /{% endif %}
                 {% endfor %}
                 ]
@@ -27,6 +28,8 @@
     <div class="site-title-banner">
         <h1>{% block heading %}neko-chan{% endblock %}</h1>
     </div>
+
+    {% block below_title %}{% endblock %}
 
     <main class="content">
         {% block content %}{% endblock %}

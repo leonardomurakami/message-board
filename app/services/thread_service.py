@@ -1,4 +1,7 @@
-from sqlalchemy.orm import Session
+import math
+from datetime import UTC, datetime
+
+from sqlalchemy.orm import Session, joinedload
 
 from app.models.board import Board
 from app.models.post import Post
@@ -29,6 +32,49 @@ def get_thread_count(db: Session, board_id: int = None) -> int:
 
 def get_thread_by_id(db: Session, thread_id: int) -> Thread | None:
     return db.query(Thread).filter(Thread.id == thread_id).first()
+
+
+def get_trending_threads(
+    db: Session, limit: int = 12, candidate_pool: int = 200
+) -> list[tuple[Thread, Post | None]]:
+    now = datetime.now(UTC)
+    candidates = (
+        db.query(Thread)
+        .options(joinedload(Thread.board))
+        .filter(Thread.post_count > 0)
+        .order_by(Thread.bumped_at.desc())
+        .limit(candidate_pool)
+        .all()
+    )
+
+    def how_hot(t: Thread) -> float:
+        bumped = t.bumped_at
+        if bumped is None:
+            return 0.0
+        if bumped.tzinfo is None:
+            bumped = bumped.replace(tzinfo=UTC)
+        hours = max((now - bumped).total_seconds() / 3600.0, 0.25)
+        return t.post_count / math.sqrt(hours)
+
+    candidates.sort(key=how_hot, reverse=True)
+    threads = candidates[:limit]
+
+    if not threads:
+        return []
+
+    ids = [t.id for t in threads]
+    posts = (
+        db.query(Post)
+        .filter(Post.thread_id.in_(ids))
+        .order_by(Post.thread_id.asc(), Post.post_number.asc())
+        .all()
+    )
+    first_by_tid: dict[int, Post] = {}
+    for p in posts:
+        if p.thread_id not in first_by_tid:
+            first_by_tid[p.thread_id] = p
+
+    return [(t, first_by_tid.get(t.id)) for t in threads]
 
 
 def create_thread(db: Session, board_id: int, thread: ThreadCreate) -> Thread:
